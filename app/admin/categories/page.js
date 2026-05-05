@@ -93,23 +93,19 @@ export default function Categories() {
         {items.map((item, i) => (
           <div key={item.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'14px 24px',borderBottom: i < items.length-1 ? '1px solid #f0f0f0':'none',gap:'12px'}}>
             <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
-              {table !== 'sous_sous_categories' && (
-                item.image_url
-                  ? <img src={item.image_url} style={{width:'48px',height:'48px',objectFit:'cover',borderRadius:'4px'}} />
-                  : <div style={{width:'48px',height:'48px',background:'#f0f0f0',borderRadius:'4px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'10px',color:'#999'}}>IMG</div>
-              )}
+              item.image_url
+  ? <img src={item.image_url} style={{width:'48px',height:'48px',objectFit:'cover',borderRadius:'4px'}} />
+  : <div style={{width:'48px',height:'48px',background:'#f0f0f0',borderRadius:'4px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'10px',color:'#999'}}>IMG</div>
               <div>
                 <div style={{fontSize:'14px'}}>{item.nom}</div>
                 {getSubLabel && <div style={{fontSize:'11px',color:'#6E6E6E',marginTop:'2px'}}>{getSubLabel(item)}</div>}
               </div>
             </div>
             <div style={{display:'flex',gap:'8px',alignItems:'center'}}>
-              {table !== 'sous_sous_categories' && (
-                <label style={{fontSize:'12px',padding:'6px 12px',border:'1px solid #003CC7',borderRadius:'4px',color:'#003CC7',cursor:'pointer',whiteSpace:'nowrap'}}>
-                  {uploadingId === item.id ? 'Upload...' : '📷 Image'}
-                  <input type="file" accept="image/*" style={{display:'none'}} onChange={e => e.target.files[0] && uploadImage(item.id, e.target.files[0], table)} />
-                </label>
-              )}
+              <label style={{fontSize:'12px',padding:'6px 12px',border:'1px solid #003CC7',borderRadius:'4px',color:'#003CC7',cursor:'pointer',whiteSpace:'nowrap'}}>
+  {uploadingId === item.id ? 'Upload...' : '📷 Image'}
+  <input type="file" accept="image/*" style={{display:'none'}} onChange={e => e.target.files[0] && uploadImage(item.id, e.target.files[0], table)} />
+</label>
               <button onClick={() => deleteItem(table, item.id)} style={{fontSize:'12px',padding:'6px 12px',border:'1px solid #ffcccc',borderRadius:'4px',background:'#fff5f5',color:'#cc0000',cursor:'pointer'}}>
                 Supprimer
               </button>
