@@ -77,7 +77,7 @@ export default function Categories() {
   }
 
   const input = { width:'100%', padding:'10px 14px', border:'1px solid #ddd', borderRadius:'4px', fontSize:'13px', outline:'none', boxSizing:'border-box' }
-  const label = { fontSize:'11px', letterSpacing:'.08em', textTransform:'uppercase', color:'#6E6E6E', display:'block', marginBottom:'6px' }
+  const labelStyle = { fontSize:'11px', letterSpacing:'.08em', textTransform:'uppercase', color:'#6E6E6E', display:'block', marginBottom:'6px' }
   const btn = { background:'#003CC7', color:'white', padding:'10px 20px', border:'none', borderRadius:'4px', fontSize:'13px', cursor:'pointer' }
   const card = { background:'white', padding:'24px', borderRadius:'8px', border:'1px solid #eee', marginBottom:'24px' }
 
@@ -93,9 +93,10 @@ export default function Categories() {
         {items.map((item, i) => (
           <div key={item.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'14px 24px',borderBottom: i < items.length-1 ? '1px solid #f0f0f0':'none',gap:'12px'}}>
             <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
-              item.image_url
-  ? <img src={item.image_url} style={{width:'48px',height:'48px',objectFit:'cover',borderRadius:'4px'}} />
-  : <div style={{width:'48px',height:'48px',background:'#f0f0f0',borderRadius:'4px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'10px',color:'#999'}}>IMG</div>
+              {item.image_url
+                ? <img src={item.image_url} style={{width:'48px',height:'48px',objectFit:'cover',borderRadius:'4px'}} />
+                : <div style={{width:'48px',height:'48px',background:'#f0f0f0',borderRadius:'4px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'10px',color:'#999'}}>IMG</div>
+              }
               <div>
                 <div style={{fontSize:'14px'}}>{item.nom}</div>
                 {getSubLabel && <div style={{fontSize:'11px',color:'#6E6E6E',marginTop:'2px'}}>{getSubLabel(item)}</div>}
@@ -103,9 +104,9 @@ export default function Categories() {
             </div>
             <div style={{display:'flex',gap:'8px',alignItems:'center'}}>
               <label style={{fontSize:'12px',padding:'6px 12px',border:'1px solid #003CC7',borderRadius:'4px',color:'#003CC7',cursor:'pointer',whiteSpace:'nowrap'}}>
-  {uploadingId === item.id ? 'Upload...' : '📷 Image'}
-  <input type="file" accept="image/*" style={{display:'none'}} onChange={e => e.target.files[0] && uploadImage(item.id, e.target.files[0], table)} />
-</label>
+                {uploadingId === item.id ? 'Upload...' : '📷 Image'}
+                <input type="file" accept="image/*" style={{display:'none'}} onChange={e => e.target.files[0] && uploadImage(item.id, e.target.files[0], table)} />
+              </label>
               <button onClick={() => deleteItem(table, item.id)} style={{fontSize:'12px',padding:'6px 12px',border:'1px solid #ffcccc',borderRadius:'4px',background:'#fff5f5',color:'#cc0000',cursor:'pointer'}}>
                 Supprimer
               </button>
@@ -121,23 +122,21 @@ export default function Categories() {
       <h1 style={{fontSize:'24px',fontWeight:600,marginBottom:'8px'}}>Catégories</h1>
       <p style={{fontSize:'13px',color:'#6E6E6E',marginBottom:'24px'}}>Gérer les catégories, sous-catégories et sous-sous-catégories</p>
 
-      {/* TABS */}
       <div style={{display:'flex',gap:'2px',marginBottom:'28px',background:'#f0f0f0',padding:'4px',borderRadius:'6px',width:'fit-content'}}>
         {tabs.map(t => (
-          <button key={t} onClick={() => setActiveTab(t)} style={{padding:'8px 16px',border:'none',borderRadius:'4px',fontSize:'12px',cursor:'pointer',fontFamily:'var(--sans)',background:activeTab===t?'white':'transparent',color:activeTab===t?'#003CC7':'#6E6E6E',fontWeight:activeTab===t?600:400,boxShadow:activeTab===t?'0 1px 3px rgba(0,0,0,.1)':'none'}}>
+          <button key={t} onClick={() => setActiveTab(t)} style={{padding:'8px 16px',border:'none',borderRadius:'4px',fontSize:'12px',cursor:'pointer',background:activeTab===t?'white':'transparent',color:activeTab===t?'#003CC7':'#6E6E6E',fontWeight:activeTab===t?600:400,boxShadow:activeTab===t?'0 1px 3px rgba(0,0,0,.1)':'none'}}>
             {t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
         ))}
       </div>
 
-      {/* CATEGORIES TAB */}
       {activeTab === 'categories' && (
         <div>
           <form onSubmit={addCategory} style={card}>
             <h2 style={{fontSize:'16px',fontWeight:600,marginBottom:'16px'}}>Nouvelle catégorie</h2>
             <div style={{display:'flex',gap:'12px'}}>
               <div style={{flex:1}}>
-                <label style={label}>Nom</label>
+                <label style={labelStyle}>Nom</label>
                 <input value={nom} onChange={e => setNom(e.target.value)} required style={input} />
               </div>
               <div style={{display:'flex',alignItems:'flex-end'}}>
@@ -149,21 +148,20 @@ export default function Categories() {
         </div>
       )}
 
-      {/* SOUS-CATEGORIES TAB */}
       {activeTab === 'sous-categories' && (
         <div>
           <form onSubmit={addSousCategory} style={card}>
             <h2 style={{fontSize:'16px',fontWeight:600,marginBottom:'16px'}}>Nouvelle sous-catégorie</h2>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr auto',gap:'12px',alignItems:'flex-end'}}>
               <div>
-                <label style={label}>Catégorie parente</label>
+                <label style={labelStyle}>Catégorie parente</label>
                 <select value={selectedCat} onChange={e => setSelectedCat(e.target.value)} required style={input}>
                   <option value="">-- Choisir --</option>
                   {categories.map(c => <option key={c.id} value={c.id}>{c.nom}</option>)}
                 </select>
               </div>
               <div>
-                <label style={label}>Nom</label>
+                <label style={labelStyle}>Nom</label>
                 <input value={nomSous} onChange={e => setNomSous(e.target.value)} required style={input} />
               </div>
               <button type="submit" disabled={loading} style={btn}>+ Ajouter</button>
@@ -173,21 +171,20 @@ export default function Categories() {
         </div>
       )}
 
-      {/* SOUS-SOUS-CATEGORIES TAB */}
       {activeTab === 'sous-sous-categories' && (
         <div>
           <form onSubmit={addSousSousCategory} style={card}>
             <h2 style={{fontSize:'16px',fontWeight:600,marginBottom:'16px'}}>Nouvelle sous-sous-catégorie</h2>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr auto',gap:'12px',alignItems:'flex-end'}}>
               <div>
-                <label style={label}>Sous-catégorie parente</label>
+                <label style={labelStyle}>Sous-catégorie parente</label>
                 <select value={selectedSous} onChange={e => setSelectedSous(e.target.value)} required style={input}>
                   <option value="">-- Choisir --</option>
                   {sousCats.map(s => <option key={s.id} value={s.id}>{s.nom} ({s.categories?.nom})</option>)}
                 </select>
               </div>
               <div>
-                <label style={label}>Nom</label>
+                <label style={labelStyle}>Nom</label>
                 <input value={nomSousSous} onChange={e => setNomSousSous(e.target.value)} required style={input} />
               </div>
               <button type="submit" disabled={loading} style={btn}>+ Ajouter</button>
