@@ -1,8 +1,9 @@
 'use client'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
-export default function NouveauProduit() {
+export default function NouvelleRealisation() {
   const router = useRouter()
-  router.push('/admin/produits')
+  useEffect(() => { router.push('/admin/realisations') }, [])
   return null
 }
